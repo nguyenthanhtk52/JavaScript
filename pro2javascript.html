@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 40px;
+        }
+         th , td{
+            border: solid 1px black;
+            text-align: center;
+        }
+        div{
+            text-align: center; 
+            margin: 20px auto;
+            padding: 10px;
+        }
+        table{
+            width:100%;
+            text-align: center;
+        }
+        @media (max-width : 740px){
+            table{
+                margin-left: 5%;
+            }
+        }
+        @media (min-width:768px) and (max-width:1024px) {
+            table {
+                width: 90%;
+                margin-left: 3%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form id="frm" name="frm">
+    <h1>CLASS MARKSHEET</h1>
+    Họ tên <input type="text" id="hoten" value=""> <br>
+    Điểm toán <input type="text" id="toan" value=""><br>
+    Điểm lý <input type="text" id="ly" value=""><br>
+    Điểm hóa <input type="text" id="hoa" value=""><br>
+    <button type="button" onclick="nhap()">Nhập</button>
+</form>
+<table id="bang" >
+<tr>
+    <th id="stt">STT</th>
+    <th id="name">Họ và tên</th>
+    <th id="math">Điểm toán</th>
+    <th id="physical">Điểm lý</th>
+    <th id="chemistry">Điểm hóa</th>
+    <th id="diemtrungbinh">Điểm trung bình</th>
+</tr>
+</table>
+<div >
+<button type="button" onclick="trungbinh()">Điểm trung bình</button>
+<button type="button" onclick="gioi()">Học sinh giỏi</button>
+<button type="button" onclick="yeu()">Học sinh yếu</button>
+<button type="button" onclick="thongke()">Thống kê</button>
+
+<p id="hocsinhgioi"></p>
+<p id="hocsinhkha"></p>
+<p id="hocsinhtrungbinh"></p>
+<p id="hocsinhyeu"></p>
+
+</div>
+<script type="text/javascript">
+    var stt = 0; 
+    var testScore = { 
+                name: "",
+                math: 0,
+                physical: 0,
+                chemistry: 0
+ };  
+
+    function nhap(){
+       
+        name=document.getElementById("hoten").value ;
+        //document.getElementById("name").value;
+        math=document.getElementById("toan").value ;
+        //document.getElementById("math").value  ;
+        physical=document.getElementById("ly").value ;
+        //document.getElementById("physical").value ;
+        chemistry=document.getElementById("hoa").value ;
+        //document.getElementById("chemistry").value ;
+
+         document.getElementById("frm").reset(); //reset lại form
+        //thêm các dòng mới khi thực hiện click
+        var table = document.getElementById("bang");
+        var row = table.insertRow();
+        var cell0 = row.insertCell() ;
+        var cell1 = row.insertCell();
+        var cell2 = row.insertCell();
+        var cell3 = row.insertCell();
+        var cell4 = row.insertCell();
+        var cell5 = row.insertCell();
+
+        stt++;
+        cell0.innerHTML=stt  ; //số thứ tự
+        cell1.innerHTML=(name);
+        cell2.innerHTML=(math) ;
+        cell3.innerHTML=(physical) ;
+        cell4.innerHTML=(chemistry) ;
+        cell5.innerHTML=" ? " ;
+    }
+    function trungbinh(){
+        var dtb = 0 ;
+    
+        var table = document.getElementById("bang");
+        for( var i = 1 ; row=table.rows[i] ; i++){
+        //lấy  giá trị theo từng cột.
+         math = parseFloat(row.cells[2].innerHTML) ;
+         physical = parseFloat(row.cells[3].innerHTML);
+         chemistry = parseFloat(row.cells[4].innerHTML);
+        dtb = (math + physical + chemistry) / 3 ;
+        row.cells[5].innerHTML= dtb ;
+        }
+    }
+    function gioi(){
+        var table= document.getElementById("bang");
+        for(var i=1 ; row = table.rows[i] ; i++){
+            var dtb =parseFloat(row.cells[5].innerHTML) ;
+            if(dtb >= 8.0){
+                row.style.backgroundColor ="red";
+            }
+        }
+    }
+    function yeu(){
+        var table = document.getElementById("bang");
+        for(var i=1 ; row = table.rows[i] ; i++){
+            var dtb = parseFloat(row.cells[5].innerHTML);
+            if(dtb <= 5.0){
+                row.style.backgroundColor ="green";
+            }
+        }
+    }
+    function thongke(){
+        var count= 0;var count1 = 0 ; var count2=0 ;var count3 = 0; //các biến đếm.
+        var table = document.getElementById("bang");
+        for(var i=1 ; row = table.rows[i] ; i++){
+            var dtb = parseFloat(row.cells [5].innerHTML);
+            if(dtb >=8.0 ){ 
+                count+=1 ;
+                document.getElementById("hocsinhgioi").innerHTML="Học sinh giỏi :" + count;
+            }
+            if(dtb>=6.5 && dtb<=8.0){ //var count1= 0;
+                count1+=1 ;
+                document.getElementById("hocsinhkha").innerHTML="Học sinh khá :" + count1;
+            }
+            if(dtb<=6.5 && dtb>=5.0){ // var count2= 0;
+                count2+=1 ;
+                document.getElementById("hocsinhtrungbinh").innerHTML="Học sinh trung bình :" + count2;
+            }
+            if(dtb<5.0){ //var count3= 0;
+                count3 +=1 ;
+                document.getElementById("hocsinhyeu").innerHTML="Học sinh yếu :" + count3;
+            }
+        }
+    }
+</script>
+</body>
+</html>

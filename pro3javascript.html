@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 40px;
+        }
+        div{
+            text-align: center; 
+            margin: 20px auto;
+            padding: 10px;
+        }
+        table{
+            width:100%;
+            text-align: center;
+        }
+         th , td{
+            border: solid 1px black;
+            text-align: center;
+            padding: 7px;
+        }
+        @media (max-width : 740px){
+            table{
+                margin-left: 5%;
+            }
+        }
+        @media (min-width:768px) and (max-width:1024px) {
+            table {
+                width: 90%;
+                margin-left: 3%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form id="frm" name="frm">
+        <h1>CLASS MARKSHEET</h1>
+        Họ tên <input type="text" id="hoten" value=""> <br>
+        Điểm toán <input type="text" id="toan" value=""><br>
+        Điểm lý <input type="text" id="ly" value=""><br>
+        Điểm hóa <input type="text" id="hoa" value=""><br>
+        <button id="btnNhap" type="button" >Nhập</button>
+    </form>
+    <table id="bang" >
+    <tr>
+        <th id="stt">STT</th>
+        <th id="name">Họ và tên</th>
+        <th id="math">Điểm toán</th>
+        <th id="physical">Điểm lý</th>
+        <th id="chemistry">Điểm hóa</th>
+        <th id="diemtrungbinh">Điểm trung bình</th>
+        <th>Select</th>
+    </tr>
+    </table>
+    <div id="myDiv" >
+    <button type="button" id="btnTrungBinh">Điểm trung bình</button>
+    <button type="button" id="btnGioi">Học sinh giỏi</button>
+    <button type="button" id="btnYeu">Học sinh yếu</button>
+    <button type="button" id="btnThongKe">Thống kê</button>
+    <button type="button" id="btnXoa">Xóa</button>
+    <p id="hocsinhgioi"></p>
+    <p id="hocsinhkha"></p>
+    <p id="hocsinhtrungbinh"></p>
+    <p id="hocsinhyeu"></p>
+    
+    </div>
+    <script>
+        $(document).ready(function(){
+            var stt = 0 ;
+            var testScore ={
+                name : "",
+                math : 0 ,
+                physical : 0 ,
+                chemistry : 0
+            };
+            $("#btnNhap").click(function(){
+                //alert("hi")
+                name = $("#hoten").val();
+                math = $("#toan").val();
+                physical = $("#ly").val();
+                chemistry =$("#hoa").val();
+                $("form")[0].reset();   //reset form
+
+                stt++ ;
+                $("#bang").append("<tr><td>"+stt+"</td><td>"+name+"</td><td>"+math+"</td><td>"+physical+"</td><td>"+chemistry+"</td><td>"+"?"+"</td><td><input type='checkbox' name='record'></td></tr>");
+            });
+            $("#btnTrungBinh").click(function(){
+                $("#bang").find("tr").not(":first").each(function(){ //duyệt qua các dòng (tr).bỏ qua dòng đầu tiên
+                    math = $(this).find("td").eq(2).html();           //chọn thẻ phần tử(eq) thứ n 
+                    physical=$(this).find("td").eq(3).html();
+                    chemistry= $(this).find("td").eq(4).html();
+                    var dtb = ((parseFloat(math)+parseFloat(physical)+parseFloat(chemistry))/3).toFixed(2);
+                    $(this).find("td").eq(5).html(dtb)
+
+                });
+            //     $("#bang").find("tr").not(":first").each(function(){
+            //       // if($(this).html() != $("tr:first").html()){
+            //         math = $(this).children("td:nth-child(2)").html() ;
+            //         physical = $(this).children("td:nth-child(3)").html() ;
+            //         chemistry = $(this).children("td:nth-child(4)").html() ;
+                   
+            //        var dtb= ((parseFloat(math) + parseFloat(physical) + parseFloat(chemistry))/3).toFixed(2) ;
+            //         // console.log(dtb)
+            //        $(this).children("td:last-child()").html(dtb);
+           
+            });
+            $("#btnGioi").click(function(){
+                $("#bang").find("tr").not(":first").each(function(){
+                    if($(this).find("td").eq(5).html() >= 8.0){
+                        $(this).css("background-color", "red");
+                    }
+                });
+            });
+            $("#btnYeu").click(function(){
+                $("#bang").find("tr").not(":first").each(function(){
+                    if($(this).find("td").eq(5).html() <=5.0){
+                        $(this).css("background-color","green");
+                    }
+                });
+            });
+            $("#btnThongKe").click(function(){ 
+                
+                var count = 0 ; var count1 = 0 ; var count2 = 0 ; var count3 = 0 ;
+                $("#bang").find("tr").not(":first").each(function(){
+                     var dtb = parseFloat($(this).find("td").eq(5).html());
+                   if (dtb >= 8.0){
+                       count ++ ;
+                     $("#hocsinhgioi").html("Học sinh giỏi :"+count);
+                   }
+                   if(dtb>=6.5 && dtb <=8.0){
+                       count1 ++;
+                       $("#hocsinhkha").html("Học sinh khá :"+count1);
+                   }
+                   if(dtb>=5.0 && dtb <= 6.5){
+                       count2 ++;
+                       $("#hocsinhtrungbinh").html("Học sinh trung bình :"+count2);
+                   }
+                   if( dtb <=5.0){
+                       count3 ++;
+                       $("#hocsinhyeu").html("Học sinh yếu :"+count3);
+                   }
+                });
+            });
+            $("#btnXoa").click(function(){
+                 // Chọn và xóa dòng 
+            $("table tr").find('input[name="record"]').each(function(){
+                if($(this).is(":checked")){
+                    $(this).parents("tr").remove(); //thẻ cha của checkbox bị xóa .
+                    reset($("#myDiv"));
+                }
+            });
+            });
+        });
+    </script>
+</body>
+</html>
